@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": false,
+    "version": "1.14.0",
+    "libraryName": "achaulien",
+    "libraryId": "719f9b82-4bac-4898-b654-bac3bf198082",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "Achaulien",
+    "solutionShortDescription": "Achaulien description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

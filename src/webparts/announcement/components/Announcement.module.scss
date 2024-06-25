@@ -1,0 +1,59 @@
+.container {
+  font-family: 'Segoe UI';
+  display: flex;
+  height: auto;
+  width: 100%;
+  //gap: 14px;
+  background-color: #ffff;
+  display: flex;
+ // padding: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 5px;
+  justify-content: space-between;
+  margin: 15px;
+
+  .link {
+    width: 900px;
+    color: #000;
+    background-color: #cac5c5;
+//  padding: 16px 20px 16px 20px;
+  margin-bottom: 5px;
+    height: 150px;
+    width: 49%;
+    border-radius: 4px;
+    justify-content: left;
+    align-items: start;
+    display: flex;
+    gap: 17px;
+    font-family: cursive;
+    //overflow: scroll;
+    a {
+      color: #000;
+      text-decoration: none;
+      font-family: 'segoe ui';
+    }
+
+  }
+  .ImgContainer{
+    width: 30%;
+    height: 100%;
+    img {
+      background-color: #ffff;
+    height: 100%;
+    width: 100%;
+    border-radius: 5px 0 0 5px;
+    padding: 0px;
+
+    }
+  }
+
+}
+.webPartTitle{
+  border-left: 3px solid red;
+  padding: 16px;
+}
+.Header{
+  display: flex;
+  justify-content: space-between;
+}

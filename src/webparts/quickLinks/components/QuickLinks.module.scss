@@ -1,0 +1,49 @@
+.container {
+  font-family: 'Segoe UI';
+  display: flex;
+  height: 100px;
+  width: 100%;
+  gap: 14px;
+  background-color: #cac5c5;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  border-radius: 5px;
+
+  .link {
+    width: 900px;
+    color: #fff;
+    background-color: red;
+    padding: 16px 20px 16px 20px;
+    margin: 2px;
+    height: 22px;
+    width: 17%;
+    border-radius: 4px;
+    justify-content: left;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    font-family: cursive;
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-family: 'segoe ui';
+    }
+  }
+  img {
+    background-color: #ffff;
+    height: 29px;
+    width: 33px;
+    border-radius: 4px;
+
+    padding: 3px;
+  }
+}
+.webPartTitle{
+  border-left: 3px solid red;
+  padding: 16px;
+}
+.Header{
+  display: flex;
+  justify-content: space-between;
+}
