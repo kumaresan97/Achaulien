@@ -1,53 +1,169 @@
 import * as React from "react";
-import "./Style.css"
+import "./Style.css";
+import "primereact/resources/themes/saga-blue/theme.css";
+
 import { useEffect, useState } from "react";
 import styles from "./QuickLinks.module.scss";
-let img:any=require("../assets/Pencil.svg")
+let img: any = require("../../Global/Images/Pencil.svg");
 import { sp } from "@pnp/sp/presets/all";
+import { Config } from "../../Global/Config";
+let arrowImg = require("../../Global/Images/Frame.svg");
+import { Dialog } from "primereact/dialog";
+import "../../Global/Style.css";
+import { Tooltip } from "primereact/tooltip";
 
 const MainComponent = (props) => {
-    const [data, setData] = useState([]);
-    console.log();
-    let tempArr = [];
-    const getItems = () => {
-     sp.web.lists
-        .getByTitle("Quick links")
-        .items()
-        .then(async (res) => {
-          tempArr = res.map((val) => ({
-            Links: val.Links,
-            Title: val.Title,
-            Imgurl: JSON.parse(val.Image)?.serverRelativeUrl,
-          }));
-          await console.log(tempArr);
-          await setData([...tempArr]);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  const [data, setData] = useState([]);
+  const [isMore, setIsMore] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  let values = props.context.pageContext.web.absoluteUrl;
+  const displayedData = isMobile ? data.slice(0, 4) : data;
+
+  console.log();
+  let tempArr = [];
+  const getItems = async () => {
+    await sp.web.lists
+      .getByTitle(Config.ListNames.QuickLinks)
+      .items()
+      .then(async (res) => {
+        tempArr = await res.map((val) => ({
+          Links: val.Links,
+          Title: val.Title,
+          Imgurl: val.Image ? JSON.parse(val.Image)?.serverRelativeUrl : "",
+        }));
+        await setData([...tempArr]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // mobile Responsive Change
+  const handleResponsiveChange = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
+  useEffect(() => {
+    getItems();
+
+    // mobile Responsive Change
+    handleResponsiveChange();
+    window.addEventListener("resize", handleResponsiveChange);
+    return () => {
+      window.removeEventListener("resize", handleResponsiveChange);
     };
-    useEffect(() => {
-      getItems();
     //   console.log(props);
-    }, []);
-    return (
-      <div>
-          <div className={styles.Header}>
-           <div className={styles.webPartTitle}>
-           Quick links
-           </div>
-          <img src={`${img}`} alt="" />
-           </div>
-        <div className={styles.container}>
-          {data.map((rec, i) => (
-            //     const imageJSON = JSON.parse(rec.Image);
-            <div className={styles.link}>
-              <img src={rec.Imgurl}></img>
-              <a href={rec.Links}>{rec.Title}</a>
-            </div>
-          ))}
+  }, []);
+
+  return (
+    <>
+      {data.length > 0 ? (
+        <div className={styles.MainContainer}>
+          <div className={styles.MainSection}>
+            <p>Quick Links</p>
+            <img
+              src={`${img}`}
+              alt=""
+              onClick={() => {
+                window.open(`${values}/Lists/${Config.ListNames.QuickLinks}`);
+              }}
+            />
+          </div>
+          <div className={styles.boxContainer}>
+            {displayedData.length &&
+              displayedData.length > 0 &&
+              displayedData.map((val, index) => (
+                <div
+                  className={styles.box}
+                  onClick={() => {
+                    window.open(val.Links);
+                  }}
+                >
+                  <div className={styles.content}>
+                    <img src={val.Imgurl}></img>
+                    <p id={`quick-${index}`}>{val.Title}</p>
+                  </div>
+
+                  <Tooltip
+                    content={val.Title}
+                    position="top"
+                    // style={tooltipStyle}
+                    target={`#quick-${index}`}
+                  />
+                </div>
+              ))}
+            {isMobile && (
+              <div className={styles.moreiconContainer}>
+                <div className={styles.moreiconSection}>
+                  <p>More</p>
+                  <img
+                    src={`${arrowImg}`}
+                    alt=""
+                    onClick={() => {
+                      setIsMore(true);
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    )
-}
-export default MainComponent
+      ) : (
+        <div> no Data found !!!</div>
+      )}
+
+      <Dialog
+        // className={`Shipments`}
+        className="Seemore"
+        visible={isMore}
+        style={{ width: "80%", background: "#ccc" }}
+        onHide={() => {
+          setIsMore(false);
+        }}
+      >
+        <div style={{ padding: "10px" }}>
+          <i
+            className={`pi pi-times ${styles.dialogHeader} `}
+            onClick={() => {
+              setIsMore(false);
+            }}
+          ></i>
+          <span className={styles.quicklinks}>Quick Links</span>
+          <div className={styles.MainContainer}>
+            <div className={styles.boxContainer}>
+              {data.length &&
+                data.length > 0 &&
+                data.map((val) => (
+                  <div
+                    className={styles.box}
+                    onClick={() => {
+                      window.open(val.Links);
+                    }}
+                  >
+                    <div className={styles.content}>
+                      <img src={val.Imgurl}></img>
+                      <p>{val.Title}</p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </>
+    // <div className={styles.mainSection}>
+    //   <div className={styles.Header}>
+    //     <div className={styles.webPartTitle}>Quick links</div>
+    //     <img src={`${img}`} alt="" />
+    //   </div>
+    //   <div className={styles.container}>
+    //     {data.map((rec, i) => (
+    //       <div className={styles.link}>
+    //         <img src={rec.Imgurl}></img>
+    //         <a href={rec.Links}>{rec.Title}</a>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>
+  );
+};
+export default MainComponent;

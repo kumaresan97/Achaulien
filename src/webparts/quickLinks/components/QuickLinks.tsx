@@ -1,16 +1,19 @@
-import * as React from 'react';
-import styles from './QuickLinks.module.scss';
-import { IQuickLinksProps } from './IQuickLinksProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-import MainComponent from './MainComponent';
-import { sp } from '@pnp/sp/rest';
-import { graph } from '@pnp/graph';
+import * as React from "react";
+import styles from "./QuickLinks.module.scss";
+import { IQuickLinksProps } from "./IQuickLinksProps";
+import { escape } from "@microsoft/sp-lodash-subset";
+import MainComponent from "./MainComponent";
+import { sp } from "@pnp/sp/rest";
+import { graph } from "@pnp/graph";
 
 export default class QuickLinks extends React.Component<IQuickLinksProps, {}> {
   constructor(prop: IQuickLinksProps, state: {}) {
     super(prop);
     sp.setup({
       spfxContext: this.props.context,
+      sp: {
+        baseUrl: "https://chandrudemo.sharepoint.com/sites/Achaulien",
+      },
     });
     graph.setup({
       spfxContext: this.props.context,
@@ -22,11 +25,9 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, {}> {
       isDarkTheme,
       environmentMessage,
       hasTeamsContext,
-      userDisplayName
+      userDisplayName,
     } = this.props;
 
-    return (
-    <MainComponent/>
-    );
+    return <MainComponent context={this.props.context} />;
   }
 }

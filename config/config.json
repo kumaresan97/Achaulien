@@ -17,11 +17,38 @@
           "manifest": "./src/webparts/announcement/AnnouncementWebPart.manifest.json"
         }
       ]
+    },
+    "carousel-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/carousel/CarouselWebPart.js",
+          "manifest": "./src/webparts/carousel/CarouselWebPart.manifest.json"
+        }
+      ]
+    },
+    "faq-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/faq/FaqWebPart.js",
+          "manifest": "./src/webparts/faq/FaqWebPart.manifest.json"
+        }
+      ]
+    },
+    "shipments-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/shipments/ShipmentsWebPart.js",
+          "manifest": "./src/webparts/shipments/ShipmentsWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "QuickLinksWebPartStrings": "lib/webparts/quickLinks/loc/{locale}.js",
-    "AnnouncementWebPartStrings": "lib/webparts/announcement/loc/{locale}.js"
+    "AnnouncementWebPartStrings": "lib/webparts/announcement/loc/{locale}.js",
+    "CarouselWebPartStrings": "lib/webparts/carousel/loc/{locale}.js",
+    "FaqWebPartStrings": "lib/webparts/faq/loc/{locale}.js",
+    "ShipmentsWebPartStrings": "lib/webparts/shipments/loc/{locale}.js"
   }
 }
