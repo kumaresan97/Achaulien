@@ -1,0 +1,14 @@
+.custom-header {
+  display: flex;
+  align-items: center;
+}
+
+.custom-header .tag {
+  margin-left: 1rem;
+  font-style: italic;
+  color: gray;
+}
+
+.custom-header .pi {
+  margin-left: auto;
+}
