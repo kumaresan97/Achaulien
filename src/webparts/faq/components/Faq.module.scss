@@ -37,10 +37,13 @@
       font-weight: 600;
     }
     .PlusIcon {
-      width: 25px !important;
-      height: 25px !important;
-      background-color: #ff1721;
-      color: #ffffff;
+      width: 32px !important;
+      height: 32px !important;
+      background-color: #f7f7ff;
+      color: #3a3e43;
+      border-radius: 8px !important;
+      padding: 5px 8px !important;
+      border: 1px solid #f7f7ff !important;
     }
   }
 }
@@ -81,10 +84,13 @@
         font-weight: 600;
       }
       .PlusIcon {
-        width: 20px !important;
-        height: 20px !important;
-        background-color: #ff1721;
-        color: #ffffff;
+        width: 32px !important;
+        height: 32px !important;
+        background-color: #f7f7ff;
+        color: #3a3e43;
+        border-radius: 8px !important;
+        padding: 5px 8px !important;
+        border: 1px solid #f7f7ff !important;
       }
     }
   }

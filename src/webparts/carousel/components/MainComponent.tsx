@@ -2,13 +2,17 @@ import * as React from "react";
 import { Carousel } from "primereact/carousel";
 import "../../Global/Style.css";
 import { sp } from "@pnp/sp/presets/all";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "primereact/button";
+import { isCurrentUserIsadmin } from "../../Global/Admin";
 
 // import "primeicons/primeicons.css";
+let Pencil = require("../../Global/Images/pencil.png");
 
 const MainComponent = () => {
   const [images, setImages] = React.useState([]);
+  const [isadmin, setIsadmin] = useState(false);
+
   const responsiveOptions = [
     {
       breakpoint: "1400px",
@@ -79,6 +83,8 @@ const MainComponent = () => {
             className="image-container"
             style={{
               width: "100%",
+              height: "500px",
+              position: "relative",
             }}
           >
             <img
@@ -90,6 +96,40 @@ const MainComponent = () => {
                 objectFit: "cover",
               }}
             />
+            {isadmin && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "12px",
+                  right: "12px",
+                  background: "#fff",
+                  borderRadius: "50%",
+                  // padding: "5px",
+                  cursor: "pointer",
+                  width: 35,
+                  height: 35,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 600,
+                }}
+                onClick={() => {
+                  window.open(
+                    "https://chandrudemo.sharepoint.com/sites/Achaulien/Carousel/Forms/AllItems.aspx"
+                  );
+                }}
+              >
+                <img
+                  src={`${Pencil}`}
+                  alt=""
+                  style={{
+                    width: "16px",
+                    height: "16px",
+                  }}
+                />
+                {/* <i className="pi pi-pencil" style={{ fontSize: "2rem" }}></i> */}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -97,13 +137,13 @@ const MainComponent = () => {
   };
   useEffect(() => {
     const fetchFiles = async () => {
-      sp.web
+      await sp.web
         .getFolderByServerRelativePath("Carousel")
         .files.select("*,ListItemAllFields")
         .expand("ListItemAllFields")
         .orderBy("TimeCreated", false)
         .get()
-        .then((res) => {
+        .then(async (res) => {
           let img = [];
           img = res.map((val: any) => ({
             imgUrl: val.ServerRelativeUrl,
@@ -111,6 +151,9 @@ const MainComponent = () => {
           }));
 
           setImages([...img]);
+
+          let _isAdmin = await isCurrentUserIsadmin("Achaulien Owners");
+          setIsadmin(_isAdmin);
         })
         .catch((err) => {
           console.log(err);
@@ -122,22 +165,37 @@ const MainComponent = () => {
 
   return (
     <div>
-      <div className="card" style={{ height: "200px !important" }}>
-        <Carousel
-          className="custom-carousel"
-          value={images}
-          numVisible={1}
-          numScroll={1}
-          verticalViewPortHeight="400px"
-          showNavigators={false}
-          showIndicators={true}
-          circular
-          //   circular={hasMultipleProducts}
-          //   responsiveOptions={responsiveOptions}
-          autoplayInterval={images.length > 1 ? 3000 : 8.64e7}
-          itemTemplate={productTemplate}
-        />
-      </div>
+      {images.length ? (
+        <div className="card" style={{ height: "200px !important" }}>
+          <Carousel
+            className="custom-carousel"
+            value={images}
+            numVisible={1}
+            numScroll={1}
+            verticalViewPortHeight="320px"
+            showNavigators={false}
+            showIndicators={true}
+            circular
+            //   circular={hasMultipleProducts}
+            //   responsiveOptions={responsiveOptions}
+            autoplayInterval={images.length > 1 ? 3000 : 8.64e7}
+            itemTemplate={productTemplate}
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            minHeight: "250px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+        >
+          no data found !!!
+        </div>
+      )}
     </div>
   );
 };

@@ -57,12 +57,20 @@
   /* margin-bottom: 10px; */
 }
 .p-accordion .p-accordion-tab {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
+.p-multiselect:not(.p-disabled).p-focus {
+  box-shadow: unset !important;
+  border: 1px solid #ced4da !important;
+}
+.p-multiselect:not(.p-disabled):hover {
+  border: 1px solid #ced4da !important;
+}
+
 .p-accordion .p-accordion-header .p-accordion-header-link {
   background: none !important;
   border-radius: 8px !important;
-  padding: 10px !important;
+  /* padding: 10px !important; */
 }
 
 .p-button.p-button-danger:not(:disabled):focus,
@@ -138,9 +146,9 @@
 
 /* calender style */
 
-table.fc-col-header {
+/* table.fc-col-header {
   background: #ffa7ac;
-}
+} */
 .fc .fc-daygrid-day-frame {
   width: 50px !important;
   /* height: 50px !important; */
@@ -442,3 +450,17 @@ custom-marker {
 /* .custom-tooltip .p-tooltip-arrow {
   border-top-color: #333 !important;
 } */
+
+/* webpart top bottom margin */
+
+[data-automation-id="CanvasZone-SectionContainer"]:nth-child(1)
+  [data-automation-id="CanvasControl"] {
+  margin-top: 0px !important;
+}
+
+[data-automation-id="CanvasZone-SectionContainer"]:last-child
+  [data-automation-id="CanvasControl"] {
+  margin-bottom: 0px !important;
+}
+
+/* Maasi */

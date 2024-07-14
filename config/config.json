@@ -41,6 +41,30 @@
           "manifest": "./src/webparts/shipments/ShipmentsWebPart.manifest.json"
         }
       ]
+    },
+    "footer-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/footer/FooterWebPart.js",
+          "manifest": "./src/webparts/footer/FooterWebPart.manifest.json"
+        }
+      ]
+    },
+    "all-announcement-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/allAnnouncement/AllAnnouncementWebPart.js",
+          "manifest": "./src/webparts/allAnnouncement/AllAnnouncementWebPart.manifest.json"
+        }
+      ]
+    },
+    "announcement-view-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/announcementView/AnnouncementViewWebPart.js",
+          "manifest": "./src/webparts/announcementView/AnnouncementViewWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
@@ -49,6 +73,9 @@
     "AnnouncementWebPartStrings": "lib/webparts/announcement/loc/{locale}.js",
     "CarouselWebPartStrings": "lib/webparts/carousel/loc/{locale}.js",
     "FaqWebPartStrings": "lib/webparts/faq/loc/{locale}.js",
-    "ShipmentsWebPartStrings": "lib/webparts/shipments/loc/{locale}.js"
+    "ShipmentsWebPartStrings": "lib/webparts/shipments/loc/{locale}.js",
+    "FooterWebPartStrings": "lib/webparts/footer/loc/{locale}.js",
+    "AllAnnouncementWebPartStrings": "lib/webparts/allAnnouncement/loc/{locale}.js",
+    "AnnouncementViewWebPartStrings": "lib/webparts/announcementView/loc/{locale}.js"
   }
 }

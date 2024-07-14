@@ -11,10 +11,13 @@ let arrowImg = require("../../Global/Images/Frame.svg");
 import { Dialog } from "primereact/dialog";
 import "../../Global/Style.css";
 import { Tooltip } from "primereact/tooltip";
+import { isCurrentUserIsadmin } from "../../Global/Admin";
 
 const MainComponent = (props) => {
   const [data, setData] = useState([]);
   const [isMore, setIsMore] = useState(false);
+  const [isadmin, setIsadmin] = useState(false);
+
   const [isMobile, setIsMobile] = useState(false);
 
   let values = props.context.pageContext.web.absoluteUrl;
@@ -43,14 +46,28 @@ const MainComponent = (props) => {
     setIsMobile(window.innerWidth <= 768);
   };
   useEffect(() => {
-    getItems();
+    const checkAdminStatus = async () => {
+      await getItems(); // Assuming getAnnouncement is defined somewhere in your code
 
-    // mobile Responsive Change
-    handleResponsiveChange();
-    window.addEventListener("resize", handleResponsiveChange);
-    return () => {
-      window.removeEventListener("resize", handleResponsiveChange);
+      const _isAdmin = await isCurrentUserIsadmin("Achaulien Owners"); // Replace with your admin group name
+      setIsadmin(_isAdmin);
+
+      await handleResponsiveChange();
+      window.addEventListener("resize", handleResponsiveChange);
+      return () => {
+        window.removeEventListener("resize", handleResponsiveChange);
+      };
     };
+    checkAdminStatus();
+
+    // getItems();
+
+    // // mobile Responsive Change
+    // handleResponsiveChange();
+    // window.addEventListener("resize", handleResponsiveChange);
+    // return () => {
+    //   window.removeEventListener("resize", handleResponsiveChange);
+    // };
     //   console.log(props);
   }, []);
 
@@ -60,13 +77,15 @@ const MainComponent = (props) => {
         <div className={styles.MainContainer}>
           <div className={styles.MainSection}>
             <p>Quick Links</p>
-            <img
-              src={`${img}`}
-              alt=""
-              onClick={() => {
-                window.open(`${values}/Lists/${Config.ListNames.QuickLinks}`);
-              }}
-            />
+            {isadmin && (
+              <img
+                src={`${img}`}
+                alt=""
+                onClick={() => {
+                  window.open(`${values}/Lists/${Config.ListNames.QuickLinks}`);
+                }}
+              />
+            )}
           </div>
           <div className={styles.boxContainer}>
             {displayedData.length &&
@@ -108,28 +127,48 @@ const MainComponent = (props) => {
           </div>
         </div>
       ) : (
-        <div> no Data found !!!</div>
+        <div
+          style={{
+            minHeight: "250px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "16px",
+            fontWeight: 600,
+          }}
+        >
+          no data found !!!
+        </div>
+        // <div> no Data found !!!</div>
       )}
 
       <Dialog
         // className={`Shipments`}
         className="Seemore"
         visible={isMore}
-        style={{ width: "80%", background: "#ccc" }}
+        style={{ width: "90%", background: "#ccc" }}
         onHide={() => {
           setIsMore(false);
         }}
       >
         <div style={{ padding: "10px" }}>
-          <i
-            className={`pi pi-times ${styles.dialogHeader} `}
-            onClick={() => {
-              setIsMore(false);
-            }}
-          ></i>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <i
+              className={`pi pi-times ${styles.dialogHeader} `}
+              onClick={() => {
+                setIsMore(false);
+              }}
+            ></i>
+          </div>
           <span className={styles.quicklinks}>Quick Links</span>
-          <div className={styles.MainContainer}>
-            <div className={styles.boxContainer}>
+          <div
+            style={{ width: "100%", padding: 0 }}
+            className={styles.MainContainer}
+          >
+            <div
+              style={{ justifyContent: "center" }}
+              className={styles.boxContainer}
+            >
               {data.length &&
                 data.length > 0 &&
                 data.map((val) => (

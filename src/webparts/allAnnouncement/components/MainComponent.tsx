@@ -1,26 +1,38 @@
 import { sp } from "@pnp/sp/presets/all";
 import * as React from "react";
 // import "./Style.css";
-import styles from "./Announcement.module.scss";
+import styles from "./AllAnnouncement.module.scss";
 import { useEffect, useState } from "react";
 import { Tooltip } from "primereact/tooltip";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
-import { Config } from "../../Global/Config";
 import "../../Global/Style.css";
+import { Config } from "../../Global/Config";
 import { Dialog } from "primereact/dialog";
-import AnnouncementView from "./AnnouncementView";
+import AnnouncementView from "./Announceview";
 import { isCurrentUserIsadmin } from "../../Global/Admin";
 
 let img: any = require("../../Global/Images/Pencil.svg");
-let arrowImg: any = require("../../Global/Images/Frame.svg");
-const MainComponent = (props): JSX.Element => {
+const MainComponent = (props) => {
+  let values = props.context.pageContext.web.absoluteUrl;
   const [ispopup, setIspopup] = useState(false);
   const [isadmin, setIsadmin] = useState(false);
+
   const [selectItem, setSelectItem] = useState(null);
-  let values = props.context.pageContext.web.absoluteUrl;
 
   const [announcements, setAnnouncements] = useState([]);
+
+  const navigateToDetailsPage = async (val, flag) => {
+    setSelectItem(val);
+    setIspopup(flag);
+    // const detailsPageUrl = `${values}/SitePages/AnnouncementView.aspx?id=${imageId}`;
+    // window.location.href = detailsPageUrl;
+
+    // window.open(
+    //   `${props.context.pageContext.web.absoluteUrl}/SitePages/AnnouncementView.aspx?id=${imageId}`,
+    //   "_self"
+    // );
+  };
 
   // function getAnnouncement(){
   //     sp.web.lists.getByTitle('Announcement').items.select('Id,FileRef,Details').get().then((items:any) => {
@@ -73,8 +85,6 @@ const MainComponent = (props): JSX.Element => {
         .items.select("Id", "FileRef", "Details,Header")
         .orderBy("Modified", false)
 
-        // .orderBy("", false)
-        .top(4)
         .get();
       console.log(items, "items");
 
@@ -104,19 +114,9 @@ const MainComponent = (props): JSX.Element => {
   //   // overflowY: "scroll",
   // };
 
-  const navigateToDetailsPage = async (val, flag) => {
-    setSelectItem(val);
-    setIspopup(flag);
-    // const detailsPageUrl = `${values}/SitePages/AnnouncementView.aspx?id=${imageId}`;
-    // window.location.href = detailsPageUrl;
-
-    // window.open(
-    //   `${props.context.pageContext.web.absoluteUrl}/SitePages/AnnouncementView.aspx?id=${imageId}`,
-    //   "_self"
-    // );
-  };
-
   useEffect(() => {
+    // getAnnouncement();
+
     const checkAdminStatus = async () => {
       await getAnnouncement(); // Assuming getAnnouncement is defined somewhere in your code
 
@@ -172,16 +172,6 @@ const MainComponent = (props): JSX.Element => {
 
         <div className={styles.imgContainer}>
           <div className={styles.imgwrapper}>
-            {/* <div
-              onClick={() => {
-                window.open(
-                  `${props.context.pageContext.web.absoluteUrl}/SitePages/AnnouncementView.aspx?id=1`,
-                  "_self"
-                );
-              }}
-            >
-              Click
-            </div> */}
             {announcements.map((val, index) => (
               <div
                 className={styles.imgsplit}
@@ -209,22 +199,6 @@ const MainComponent = (props): JSX.Element => {
                 </div>
               </div>
             ))}
-          </div>
-        </div>
-
-        <div className={styles.moreiconContainer}>
-          <div className={styles.moreiconSection}>
-            <p>More</p>
-            <img
-              src={`${arrowImg}`}
-              alt=""
-              onClick={() => {
-                window.open(
-                  "https://chandrudemo.sharepoint.com/sites/Achaulien/SitePages/Announcement.aspx"
-                );
-                // setIsMore(true);
-              }}
-            />
           </div>
         </div>
       </div>

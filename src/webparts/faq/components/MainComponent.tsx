@@ -10,11 +10,15 @@ import { Button } from "primereact/button";
 import { sp } from "@pnp/sp/presets/all";
 import { Chip } from "primereact/chip";
 import { Config } from "../../Global/Config";
+import { CustomRenderingStore } from "@fullcalendar/core";
+import { isCurrentUserIsadmin } from "../../Global/Admin";
 
 let img: any = require("../../Global/Images/Pencil.svg");
 const MainComponent = (props) => {
   const [faqTags, setFaqTags] = useState([]);
   const [faqQuestions, setFaqQuestions] = useState([]);
+  const [isadmin, setIsadmin] = useState(false);
+
   const [filterQues, setFilterQues] = useState([]);
   const [selected, setSelected] = useState([]);
   let values = props.context.pageContext.web.absoluteUrl;
@@ -38,7 +42,7 @@ const MainComponent = (props) => {
     switch (value) {
       case "Apple":
         backgroundColor = "#ffc107";
-        textColor = "#333";
+        textColor = "#fff";
         break;
       case "Google":
         backgroundColor = "#4caf50";
@@ -50,7 +54,7 @@ const MainComponent = (props) => {
         break;
       default:
         backgroundColor = "#e0e0e0";
-        textColor = "#333";
+        textColor = "#fff";
     }
 
     // Return styled div
@@ -61,9 +65,11 @@ const MainComponent = (props) => {
           backgroundColor: backgroundColor,
           color: textColor,
           padding: "5px 10px",
-          borderRadius: "10px",
+          borderRadius: "20px",
           display: "inline-flex",
           margin: "5px 0px",
+          fontSize: "14px",
+          fontWeight: 400,
         }}
       >
         {value}
@@ -146,6 +152,9 @@ const MainComponent = (props) => {
     const fetchFaqTags = async () => {
       const tags = await sp.web.lists.getByTitle("FAQTags").items.get();
       setFaqTags(tags.map((tag) => ({ name: tag.Title, code: tag.Title })));
+
+      let _isAdmin = await isCurrentUserIsadmin("Achaulien Owners");
+      setIsadmin(_isAdmin);
     };
 
     // Fetch FAQ questions
@@ -197,13 +206,14 @@ const MainComponent = (props) => {
             className={styles.muldropdown}
             // className="w-full md:w-20rem"
           />
-
-          <img
-            src={`${img}`}
-            onClick={() => {
-              window.open(`${values}/Lists/${Config.ListNames.FAQ}`);
-            }}
-          />
+          {isadmin && (
+            <img
+              src={`${img}`}
+              onClick={() => {
+                window.open(`${values}/Lists/${Config.ListNames.FAQ}`);
+              }}
+            />
+          )}
         </div>
       </div>
       <div style={{ margin: "10px 0px" }}>

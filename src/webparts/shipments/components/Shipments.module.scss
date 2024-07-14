@@ -4,14 +4,21 @@
   display: flex;
   gap: 10px;
   padding: 10px 20px;
+
   .calenderSection {
     width: 40%;
+    .calendarContainer {
+      // width: 420px;
+      border-radius: 6px;
+      box-shadow: 9.49px 3.56px 26.08px 11.86px rgba(150, 150, 150, 0.11);
+    }
     .ETATitle {
       border-left: 4px solid #ff1721;
       padding: 10px;
       font-size: 16px;
       font-weight: 600;
       color: #3a3e43;
+      margin-bottom: 20px;
     }
   }
 
@@ -105,17 +112,19 @@
               p {
                 margin: 0;
                 color: #3a3e43;
-                font-weight: 500;
-                font-size: 14px;
+                font-weight: 600;
+                font-size: 16px;
               }
             }
             .ETA {
+              color: #ff1721;
+
               margin: 10px 0px 0px 0px;
-              color: #3a3e43;
               font-weight: 500;
               font-size: 14px;
               span {
-                color: #ff1721;
+                color: #3a3e43;
+
                 margin-left: 6px;
               }
             }
@@ -364,7 +373,8 @@
         width: 60% !important;
       }
       .subcontent {
-        width: 40% !important;
+        width: 36% !important;
+        text-wrap: wrap;
       }
     }
   }
