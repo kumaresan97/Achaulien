@@ -27,6 +27,7 @@ import { useEffect, useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import { Tooltip } from "primereact/tooltip";
 import MapComponent from "./MapComponent";
+import { isCurrentUserIsadmin } from "../../Global/Admin";
 
 let EditImg: any = require("../../Global/Images/Edit.png");
 let DeleteImg: any = require("../../Global/Images/Delete.png");
@@ -35,6 +36,7 @@ let shipImg: any = require("../../Global/Images/Ship.png");
 let ApiCallImg: any = require("../../Global/Images/Apicall.svg");
 let dotImg: any = require("../../Global/Images/dot.png");
 const Maincomponent = () => {
+  const [isadmin, setIsadmin] = useState(false);
   const [values, setValues] = useState([]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isAPI, setIsApi] = useState<boolean>(false);
@@ -653,6 +655,8 @@ const Maincomponent = () => {
     setLoader(true);
     const fetchData = async () => {
       try {
+        let _isadmin = await isCurrentUserIsadmin("Achaulien Owners");
+        setIsadmin(_isadmin);
         let x = await getNewListData(Config.ListNames.Shipment);
         let y = await getAttachmentUrls(Config.ListNames.Shipment, x);
       } catch (error) {
@@ -676,7 +680,9 @@ const Maincomponent = () => {
           // style={{ width: "40%" }}
         >
           <div className={styles.ETATitle}>ETA</div>
-          <div id="myCalendar"></div>
+          <div className={styles.calendarContainer}>
+            <div id="myCalendar"></div>
+          </div>
         </div>
         {loader ? (
           <div
@@ -736,19 +742,20 @@ const Maincomponent = () => {
                     className={styles.searchField}
                   />
                 </IconField>
+                {isadmin && (
+                  <Button
+                    label="Add New"
+                    className={styles.button}
+                    onClick={() => {
+                      setID(null);
+                      setFilter("");
+                      cleaeDateFilter();
+                      setIsEdit(false);
 
-                <Button
-                  label="Add New"
-                  className={styles.button}
-                  onClick={() => {
-                    setID(null);
-                    setFilter("");
-                    cleaeDateFilter();
-                    setIsEdit(false);
-
-                    setVisible(true);
-                  }}
-                />
+                      setVisible(true);
+                    }}
+                  />
+                )}
               </div>
             </div>
 
@@ -907,7 +914,9 @@ const Maincomponent = () => {
                                     display: "flex",
                                     justifyContent: "space-between",
                                     alignItems: "center",
-                                    margin: "15px 0px 0px 0px",
+                                    margin: !isadmin
+                                      ? "20px 0px 0px 0px"
+                                      : "15px 0px 0px 0px",
                                   }}
                                 >
                                   <div
@@ -917,24 +926,26 @@ const Maincomponent = () => {
                                       alignItems: "center",
                                     }}
                                   >
-                                    <img
-                                      src={`${RefreshImg}`}
-                                      alt=""
-                                      id="refreshIcon"
-                                      style={{
-                                        cursor: "pointer",
-                                        width: "23px",
-                                        height: "23px",
-                                      }}
-                                      onClick={() => {
-                                        cleaeDateFilter();
-                                        getApiData(
-                                          "refresh",
-                                          attachment.ContainerNo,
-                                          attachment.ID
-                                        );
-                                      }}
-                                    />
+                                    {isadmin && (
+                                      <img
+                                        src={`${RefreshImg}`}
+                                        alt=""
+                                        id="refreshIcon"
+                                        style={{
+                                          cursor: "pointer",
+                                          width: "23px",
+                                          height: "23px",
+                                        }}
+                                        onClick={() => {
+                                          cleaeDateFilter();
+                                          getApiData(
+                                            "refresh",
+                                            attachment.ContainerNo,
+                                            attachment.ID
+                                          );
+                                        }}
+                                      />
+                                    )}
 
                                     <p
                                       style={{
@@ -958,7 +969,15 @@ const Maincomponent = () => {
                                       gap: "10px",
                                     }}
                                   >
-                                    <img src={`${dotImg}`} alt="" />
+                                    {/* <img src={`${dotImg}`} alt="" /> */}
+                                    <span
+                                      style={{
+                                        width: "12px",
+                                        height: "12px",
+                                        borderRadius: "50%",
+                                        background: "#1D4E86",
+                                      }}
+                                    ></span>
                                     <p
                                       style={{
                                         margin: 0,
@@ -967,41 +986,46 @@ const Maincomponent = () => {
                                         color: "#818181",
                                       }}
                                     >
-                                      {
-                                        attachment?.AttachmentFiles.data
-                                          .metadata.status
-                                      }
+                                      {attachment?.AttachmentFiles.data.metadata
+                                        .status == "IN_TRANSIT"
+                                        ? "IN TRANSIT"
+                                        : attachment?.AttachmentFiles.data
+                                            .metadata.status}
                                     </p>
-                                    <img
-                                      id="editIcon"
-                                      src={`${EditImg}`}
-                                      alt=""
-                                      onClick={() => {
-                                        cleaeDateFilter();
-                                        EditHandler(attachment);
-                                      }}
-                                      style={{
-                                        cursor: "pointer",
-                                        width: "23px",
-                                        height: "23px",
-                                      }}
-                                    />
-                                    <img
-                                      onClick={() => {
-                                        cleaeDateFilter();
-                                        setIsDelete(true);
+                                    {isadmin && (
+                                      <>
+                                        <img
+                                          id="editIcon"
+                                          src={`${EditImg}`}
+                                          alt=""
+                                          onClick={() => {
+                                            cleaeDateFilter();
+                                            EditHandler(attachment);
+                                          }}
+                                          style={{
+                                            cursor: "pointer",
+                                            width: "23px",
+                                            height: "23px",
+                                          }}
+                                        />
+                                        <img
+                                          onClick={() => {
+                                            cleaeDateFilter();
+                                            setIsDelete(true);
 
-                                        setID(attachment.ID);
-                                      }}
-                                      id="deleteIcon"
-                                      src={`${DeleteImg}`}
-                                      alt=""
-                                      style={{
-                                        cursor: "pointer",
-                                        width: "23px",
-                                        height: "23px",
-                                      }}
-                                    />
+                                            setID(attachment.ID);
+                                          }}
+                                          id="deleteIcon"
+                                          src={`${DeleteImg}`}
+                                          alt=""
+                                          style={{
+                                            cursor: "pointer",
+                                            width: "23px",
+                                            height: "23px",
+                                          }}
+                                        />
+                                      </>
+                                    )}
 
                                     <Tooltip
                                       target="#editIcon"
@@ -1342,7 +1366,7 @@ const Maincomponent = () => {
               icon="pi pi-chevron-right"
               className="p-button-secondary"
               onClick={nextStep}
-              style={{ position: "absolute", top: "50%", right: "10px" }}
+              style={{ position: "absolute", top: "50%", right: "0px" }}
             />
           )}
         </div>
